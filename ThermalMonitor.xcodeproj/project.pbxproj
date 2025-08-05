@@ -10,6 +10,7 @@
 		001 /* ThermalMonitorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002 /* ThermalMonitorApp.swift */; };
 		003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004 /* ContentView.swift */; };
 		005 /* ThermalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006 /* ThermalManager.swift */; };
+		C94CBD5C2E41DF2A00A64E0D /* iOSThermalMmonitor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C94CBD5B2E41DF2A00A64E0D /* iOSThermalMmonitor.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		009 /* ThermalMonitor.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ThermalMonitor.xcconfig; sourceTree = "<group>"; };
 		100 /* ThermalMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThermalMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C94CBD5B2E41DF2A00A64E0D /* iOSThermalMmonitor.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iOSThermalMmonitor.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +37,7 @@
 		300 = {
 			isa = PBXGroup;
 			children = (
+				C94CBD5B2E41DF2A00A64E0D /* iOSThermalMmonitor.xcassets */,
 				301 /* ThermalMonitor */,
 				302 /* Products */,
 				009 /* ThermalMonitor.xcconfig */,
@@ -142,6 +145,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C94CBD5C2E41DF2A00A64E0D /* iOSThermalMmonitor.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,8 +292,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 009 /* ThermalMonitor.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = iOSThermalMmonitor;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
@@ -318,8 +323,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 009 /* ThermalMonitor.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = iOSThermalMmonitor;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
