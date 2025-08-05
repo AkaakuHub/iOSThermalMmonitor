@@ -20,7 +20,7 @@ struct ContentView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("温度監視")
+            .navigationTitle("サーマルモニター")
             .sheet(isPresented: $showDetails) {
                 SettingsView()
             }
@@ -34,7 +34,7 @@ struct ContentView: View {
                 .foregroundStyle(thermalStateColor)
                 .symbolEffect(.pulse, isActive: thermalManager.thermalState != .nominal)
             
-            Text("デバイス温度監視")
+            Text("デバイスサーマルモニター")
                 .font(.title2)
                 .fontWeight(.medium)
         }

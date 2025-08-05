@@ -1,10 +1,10 @@
-# ThermalMonitor - iPhone温度監視アプリ
+# ThermalMonitor - iPhoneサーマルモニターアプリ
 
 iPhone/iPadの熱状態をリアルタイムで監視し、状態変化時に通知を送信するアプリです。
 
 ## 🌡️ 機能
 
-- **リアルタイム温度監視**: デバイスの熱状態を常時監視
+- **リアルタイムサーマルモニター**: デバイスの熱状態を常時監視
 - **状態変化通知**: 熱状態が変化した際に自動でプッシュ通知
 - **シンプルなUI**: 現在の状態と推奨事項を分かりやすく表示
 - **4段階の状態表示**: 正常・良好・注意・危険の4レベル
@@ -58,7 +58,7 @@ ThermalMonitor/
 │   │   └── ThermalMonitor/
 │   │       ├── ThermalMonitorApp.swift    # メインアプリ
 │   │       ├── ContentView.swift          # メインUI
-│   │       └── ThermalManager.swift       # 温度監視ロジック
+│   │       └── ThermalManager.swift       # サーマルモニターロジック
 │   └── Resources/
 │       └── Info.plist                     # アプリ設定
 ├── scripts/
