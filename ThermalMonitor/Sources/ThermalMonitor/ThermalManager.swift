@@ -13,12 +13,23 @@ import os.log
         @Published private(set) var notificationPermissionStatus: UNAuthorizationStatus =
             .notDetermined
         @Published private(set) var hasRequestedPermission: Bool = false
+        @Published var isNotificationEnabled: Bool = true {
+            didSet {
+                UserDefaults.standard.set(isNotificationEnabled, forKey: "isNotificationEnabled")
+            }
+        }
 
         private var monitoringTask: Task<Void, Never>?
         private let logger = Logger(subsystem: "com.thermalmonitor.app", category: "ThermalManager")
 
         private init() {
             self.thermalState = ProcessInfo.processInfo.thermalState
+            
+            // 保存済みの値を読み込む（初回起動時はデフォルトのtrueを使用）
+            if UserDefaults.standard.object(forKey: "isNotificationEnabled") != nil {
+                self.isNotificationEnabled = UserDefaults.standard.bool(forKey: "isNotificationEnabled")
+            }
+            
             startMonitoring()
             checkNotificationPermissionStatus()
             setupAppLifecycleObservers()
@@ -124,10 +135,10 @@ import os.log
             logger.info(
                 "🔔 Checking notification for: \(previousState.rawValue) → \(newState.rawValue)")
 
-            // 通知権限がない場合は送信しない
-            guard self.notificationPermissionStatus == .authorized else {
+            // 通知権限がない、またはユーザーが無効にしている場合は送信しない
+            guard self.notificationPermissionStatus == .authorized && self.isNotificationEnabled else {
                 logger.info(
-                    "🔔 Notification not sent - permission not granted (\(self.notificationPermissionStatus.rawValue))"
+                    "🔔 Notification not sent - permission: \(self.notificationPermissionStatus.rawValue), enabled: \(self.isNotificationEnabled)"
                 )
                 return
             }

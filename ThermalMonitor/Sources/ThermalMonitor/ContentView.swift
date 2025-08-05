@@ -21,6 +21,9 @@ import UserNotifications
                     thermalStatusCard
                     recommendationView
                     timestampView
+                    
+                    // 通知設定トグル
+                    notificationToggleSection
 
                     Button("詳細設定") {
                         showDetails = true
@@ -178,6 +181,39 @@ import UserNotifications
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
+        }
+        
+        // 通知設定トグル
+        private var notificationToggleSection: some View {
+            VStack(spacing: 15) {
+                HStack {
+                    Image(systemName: "bell.fill")
+                        .foregroundColor(.blue)
+                        .font(.title2)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("通知設定")
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        
+                        Text("温度変化時の通知を\(thermalManager.isNotificationEnabled ? "有効" : "無効")にする")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    Toggle("", isOn: $thermalManager.isNotificationEnabled)
+                        .toggleStyle(SwitchToggleStyle(tint: .blue))
+                        .scaleEffect(0.9)
+                }
+            }
+            .padding(20)
+            .background(
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(.regularMaterial)
+                    .shadow(color: .primary.opacity(0.1), radius: 5, x: 0, y: 2)
+            )
         }
 
         // SwiftUI 6のColor API
