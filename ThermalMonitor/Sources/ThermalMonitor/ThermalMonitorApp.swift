@@ -1,11 +1,14 @@
 import SwiftUI
 
-@main
-struct ThermalMonitorApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environmentObject(ThermalManager.shared)
+#if os(iOS)
+    @available(iOS 18.0, *)
+    @main
+    struct ThermalMonitorApp: App {
+        var body: some Scene {
+            WindowGroup {
+                ContentView()
+                    .environmentObject(ThermalManager.shared)
+            }
         }
     }
-}
+#endif
