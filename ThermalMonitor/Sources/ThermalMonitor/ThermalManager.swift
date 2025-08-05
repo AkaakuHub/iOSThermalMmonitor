@@ -29,14 +29,18 @@ final class ThermalManager: ObservableObject {
     private func startMonitoring() {
         stopMonitoring()
         
+        // 初回現在状態をログ出力
+        logger.info("🌡️ Initial thermal state: \(ProcessInfo.processInfo.thermalState.rawValue)")
+        
         monitoringTask = Task {
             let stream = AsyncStream<ProcessInfo.ThermalState> { continuation in
                 let observer = NotificationCenter.default.addObserver(
                     forName: ProcessInfo.thermalStateDidChangeNotification,
                     object: nil,
-                    queue: nil
+                    queue: .main // メインキューで確実に処理
                 ) { _ in
-                    continuation.yield(ProcessInfo.processInfo.thermalState)
+                    let currentState = ProcessInfo.processInfo.thermalState
+                    continuation.yield(currentState)
                 }
                 continuation.onTermination = { @Sendable _ in
                     NotificationCenter.default.removeObserver(observer)
@@ -44,15 +48,23 @@ final class ThermalManager: ObservableObject {
             }
             
             for await newState in stream {
-                if self.thermalState != newState {
-                    let previousState = self.thermalState
-                    logger.info("Thermal state changed from \(String(describing: previousState)) to \(String(describing: newState))")
-                    
+                logger.info("🌡️ Notification received: \(newState.rawValue)")
+                
+                // 現在の状態と異なる場合のみ処理
+                guard self.thermalState != newState else { 
+                    logger.info("🌡️ State unchanged, skipping")
+                    continue 
+                }
+                
+                let previousState = self.thermalState
+                logger.info("🌡️ State change detected: \(previousState.rawValue) → \(newState.rawValue)")
+                
+                await MainActor.run {
                     self.thermalState = newState
                     self.lastStateChange = Date()
-                    
-                    await sendNotificationIfNeeded(from: previousState, to: newState)
                 }
+                
+                await sendNotificationIfNeeded(from: previousState, to: newState)
             }
         }
     }
@@ -99,13 +111,15 @@ final class ThermalManager: ObservableObject {
     }
     
     private func setupAppLifecycleObservers() {
-        logger.info("ThermalManager initialized")
+        logger.info("ThermalManager initialized with background monitoring")
     }
     
     private func sendNotificationIfNeeded(from previousState: ProcessInfo.ThermalState, to newState: ProcessInfo.ThermalState) async {
+        logger.info("🔔 Checking notification for: \(previousState.rawValue) → \(newState.rawValue)")
+        
         // 通知権限がない場合は送信しない
-        guard notificationPermissionStatus == .authorized else {
-            logger.info("Notification not sent - permission not granted")
+        guard self.notificationPermissionStatus == .authorized else {
+            logger.info("🔔 Notification not sent - permission not granted (\(self.notificationPermissionStatus.rawValue))")
             return
         }
         
@@ -156,9 +170,9 @@ final class ThermalManager: ObservableObject {
         
         do {
             try await UNUserNotificationCenter.current().add(request)
-            logger.info("Notification sent for thermal state: \(String(describing: newState))")
+            logger.info("🔔 ✅ Notification sent successfully: \(newState.rawValue)")
         } catch {
-            logger.error("通知送信エラー: \(error.localizedDescription)")
+            logger.error("🔔 ❌ Notification error: \(error.localizedDescription)")
         }
     }
     

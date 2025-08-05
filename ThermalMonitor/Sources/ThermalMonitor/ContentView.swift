@@ -20,11 +20,6 @@ struct ContentView: View {
                 recommendationView
                 timestampView
                 
-                Button("詳細設定") {
-                    showDetails = true
-                }
-                .buttonStyle(.borderedProminent)
-                
                 Spacer()
             }
             .padding()
