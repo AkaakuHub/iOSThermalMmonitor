@@ -8,6 +8,8 @@ final class ThermalManager: ObservableObject {
     
     @Published private(set) var thermalState: ProcessInfo.ThermalState
     @Published private(set) var lastStateChange: Date = Date()
+    @Published private(set) var notificationPermissionStatus: UNAuthorizationStatus = .notDetermined
+    @Published private(set) var hasRequestedPermission: Bool = false
     
     private var monitoringTask: Task<Void, Never>?
     private let logger = Logger(subsystem: "com.thermalmonitor.app", category: "ThermalManager")
@@ -15,11 +17,13 @@ final class ThermalManager: ObservableObject {
     private init() {
         self.thermalState = ProcessInfo.processInfo.thermalState
         startMonitoring()
-        requestNotificationPermission()
+        checkNotificationPermissionStatus()
+        setupAppLifecycleObservers()
     }
     
     deinit {
         stopMonitoring()
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func startMonitoring() {
@@ -58,20 +62,53 @@ final class ThermalManager: ObservableObject {
         monitoringTask = nil
     }
     
-    private func requestNotificationPermission() {
+    // 通知権限の状態をチェック
+    func checkNotificationPermissionStatus() {
         Task {
+            let settings = await UNUserNotificationCenter.current().notificationSettings()
+            await MainActor.run {
+                self.notificationPermissionStatus = settings.authorizationStatus
+                
+                // 初回起動時（まだ許可要求していない場合）自動で権限要求
+                if settings.authorizationStatus == .notDetermined && !hasRequestedPermission {
+                    self.requestNotificationPermission()
+                }
+            }
+        }
+    }
+    
+    // 通知権限を要求（UIから呼び出し可能）
+    func requestNotificationPermission() {
+        Task {
+            hasRequestedPermission = true
             do {
                 let granted = try await UNUserNotificationCenter.current().requestAuthorization(
-                    options: [.alert, .sound, .badge, .provisional]
+                    options: [.alert, .sound, .badge]
                 )
+                await MainActor.run {
+                    self.notificationPermissionStatus = granted ? .authorized : .denied
+                }
                 logger.info("Notification permission granted: \(granted)")
             } catch {
+                await MainActor.run {
+                    self.notificationPermissionStatus = .denied
+                }
                 logger.error("通知許可エラー: \(error.localizedDescription)")
             }
         }
     }
     
+    private func setupAppLifecycleObservers() {
+        logger.info("ThermalManager initialized")
+    }
+    
     private func sendNotificationIfNeeded(from previousState: ProcessInfo.ThermalState, to newState: ProcessInfo.ThermalState) async {
+        // 通知権限がない場合は送信しない
+        guard notificationPermissionStatus == .authorized else {
+            logger.info("Notification not sent - permission not granted")
+            return
+        }
+        
         let content = UNMutableNotificationContent()
         content.sound = .default
         content.interruptionLevel = .active
