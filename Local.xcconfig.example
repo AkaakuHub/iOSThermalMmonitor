@@ -1,0 +1,22 @@
+// Local Configuration Example
+// このファイルを "Local.xcconfig" にリネームして使用してください
+// Local.xcconfig は .gitignore で除外されているため、個人の設定がコミットされることはありません
+
+// 【重要】あなたの Apple Developer Team ID を設定してください
+// Team ID は以下で確認できます：
+// 1. Apple Developer Portal → Membership → Team ID
+// 2. Xcode → Preferences → Accounts で確認
+// 3. keychain のDeveloper ID証明書の組織単位 (OU) から確認
+
+// シミュレーターでは不要ですが、実機でテストする場合は必須です
+DEVELOPMENT_TEAM = YOUR_TEAM_ID_HERE
+
+// Bundle Identifier を変更したい場合（他の開発者との競合回避）
+// PRODUCT_BUNDLE_IDENTIFIER = com.yourname.thermalmonitor
+
+// Code Signing を自動にする場合（推奨）
+// CODE_SIGN_STYLE = Automatic
+
+// 手動でProvisioning Profileを指定する場合
+// CODE_SIGN_STYLE = Manual
+// PROVISIONING_PROFILE_SPECIFIER = "Your Profile Name"

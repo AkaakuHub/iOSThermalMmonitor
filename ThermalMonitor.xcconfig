@@ -1,0 +1,13 @@
+// ThermalMonitor - iOS Project Configuration
+// 共有設定（チーム全体で使用）
+
+// iOS設定
+IPHONEOS_DEPLOYMENT_TARGET = 18.0
+TARGETED_DEVICE_FAMILY = 1,2
+
+// Swift設定
+SWIFT_VERSION = 5.0
+
+// ローカル設定ファイルを読み込み（個人の設定で上書き）
+// Local.xcconfig ファイルがある場合のみ読み込まれます
+#include? "Local.xcconfig"
