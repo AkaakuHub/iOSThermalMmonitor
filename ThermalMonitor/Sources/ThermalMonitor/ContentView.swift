@@ -19,6 +19,11 @@ struct ContentView: View {
                 thermalStatusCard
                 recommendationView
                 timestampView
+
+                Button("詳細設定") {
+                    showDetails = true
+                }
+                .buttonStyle(.borderedProminent)
                 
                 Spacer()
             }
